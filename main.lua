@@ -144,6 +144,8 @@ local pieceStructures = {
 }
 
 function love.load()
+    timer = 0
+
     blocks = {}
     for x = 1, gridCols do
         blocks[x] = {}
@@ -152,20 +154,19 @@ function love.load()
         end
     end
 
-    -- blocks[1][18] = 'i'
-    -- blocks[2][17] = 'j'
-    -- blocks[3][16] = 'l'
-    -- blocks[4][15] = 'o'
-    -- blocks[5][14] = 's'
-    -- blocks[6][13] = 't'
-    -- blocks[7][12] = 'z'
-
     pieceType = 1
     pieceRotation = 1
+    pieceX = 3
+    pieceY = 0
 end
 
 function love.update(dt)
-
+    fallDelta = 0.5
+    timer = timer + dt
+    if timer > fallDelta then
+        pieceY = pieceY + 1
+        timer = timer - fallDelta
+    end
 end
 
 function love.draw()
@@ -180,7 +181,7 @@ function love.draw()
         for y = 1, 4 do
             local block = pieceStructures[pieceType][pieceRotation][y][x]
             if block ~= ' ' then
-                drawBlock(block, x, y)
+                drawBlock(block, x + pieceX, y + pieceY)
             end
         end
     end
@@ -201,6 +202,13 @@ function love.keypressed(key)
         if pieceRotation < 1 then
             pieceRotation = #pieceStructures[pieceType]
         end
+    end
+    if key == 'left' then
+        pieceX = pieceX - 1
+
+    end
+    if key == 'right' then
+        pieceX = pieceX + 1
     end
 end
 
