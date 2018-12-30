@@ -164,8 +164,11 @@ function love.update(dt)
     fallDelta = 0.5
     timer = timer + dt
     if timer > fallDelta then
-        pieceY = pieceY + 1
         timer = timer - fallDelta
+        local nextY = pieceY + 1
+        if canPieceMove(x, nextY, pieceRotation) then
+            pieceY = nextY
+        end
     end
 end
 
@@ -192,23 +195,34 @@ function love.keypressed(key)
         love.event.quit()
     end
     if key == 'x' then
-        pieceRotation = pieceRotation + 1
-        if pieceRotation > #pieceStructures[pieceType] then
-            pieceRotation = 1
+        local nextRotation = pieceRotation + 1
+        if nextRotation > #pieceStructures[pieceType] then
+            nextRotation = 1
+        end
+        if canPieceMove(pieceX, pieceY, nextRotation) then
+            pieceRotation = nextRotation
         end
     end
     if key == 'z' then
-        pieceRotation = pieceRotation - 1
-        if pieceRotation < 1 then
-            pieceRotation = #pieceStructures[pieceType]
+        local nextRotation = pieceRotation - 1
+        if nextRotation < 1 then
+            nextRotation = #pieceStructures[pieceType]
+        end
+        if canPieceMove(pieceX, pieceY, nextRotation) then
+            pieceRotation = nextRotation
         end
     end
     if key == 'left' then
-        pieceX = pieceX - 1
-
+        local nextX = pieceX - 1
+        if canPieceMove(nextX, pieceY, pieceRotation) then
+            pieceX = nextX
+        end
     end
     if key == 'right' then
-        pieceX = pieceX + 1
+        local nextX = pieceX + 1
+        if canPieceMove(nextX, pieceY, pieceRotation) then
+            pieceX = nextX
+        end
     end
 end
 
@@ -225,4 +239,8 @@ function drawBlock(block, x, y)
         blockDrawSize,
         blockDrawSize
     )
+end
+
+function canPieceMove(x, y, rotation)
+    return true
 end
