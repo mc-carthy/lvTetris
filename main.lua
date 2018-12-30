@@ -143,6 +143,9 @@ local pieceStructures = {
     },
 }
 
+local pieceXCount = 4
+local pieceYCount = 4
+
 function love.load()
     timer = 0
 
@@ -166,7 +169,7 @@ function love.update(dt)
     if timer > fallDelta then
         timer = timer - fallDelta
         local nextY = pieceY + 1
-        if canPieceMove(x, nextY, pieceRotation) then
+        if canPieceMove(pieceX, nextY, pieceRotation) then
             pieceY = nextY
         end
     end
@@ -180,8 +183,8 @@ function love.draw()
         end
     end
 
-    for x = 1, 4 do
-        for y = 1, 4 do
+    for x = 1, pieceXCount do
+        for y = 1, pieceYCount do
             local block = pieceStructures[pieceType][pieceRotation][y][x]
             if block ~= ' ' then
                 drawBlock(block, x + pieceX, y + pieceY)
@@ -241,6 +244,20 @@ function drawBlock(block, x, y)
     )
 end
 
-function canPieceMove(x, y, rotation)
+function canPieceMove(testX, testY, testRotation)
+    for x = 1, pieceXCount do
+        for y = 1, pieceYCount do
+            local testBlockX = testX + x
+            local testBlockY = testY + y
+            if pieceStructures[pieceType][testRotation][y][x] ~= ' ' and (
+                (testBlockX) < 1 or
+                (testBlockX) > gridCols or
+                (testBlockY) > gridRows or
+                blocks[testBlockX][testBlockY] ~= ' '
+            ) then
+                return false
+            end
+        end
+    end
     return true
 end
