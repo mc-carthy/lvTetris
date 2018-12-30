@@ -161,7 +161,7 @@ function love.load()
 end
 
 function love.update(dt)
-    fallDelta = 0.5
+    fallDelta = love.keyboard.isDown('down') and 0.1 or 0.5
     timer = timer + dt
     if timer > fallDelta then
         timer = timer - fallDelta
