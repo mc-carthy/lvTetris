@@ -170,6 +170,7 @@ function love.update(dt)
         if canPieceMove(pieceX, nextY, pieceRotation) then
             pieceY = nextY
         else
+            -- Add block to 'blocks'
             for x = 1, pieceXCount do
                 for y = 1, pieceYCount do
                     local block = pieceStructures[pieceType][pieceRotation][y][x]
@@ -178,6 +179,29 @@ function love.update(dt)
                     end
                 end
             end
+
+            -- Check for complete rows
+            for y = 1, gridRows do
+                local complete = true
+                for x = 1, gridCols do
+                    if blocks[x][y] == ' ' then
+                        complete = false
+                    end
+                end
+
+                if complete then
+                    for removeY = y, 2, -1 do
+                        for removeX = 1, gridCols do
+                            blocks[removeX][removeY] = blocks[removeX][removeY - 1]
+                        end
+                    end
+
+                    for removeX = 1, gridCols do
+                        blocks[1][removeX] = ' '
+                    end
+                end
+            end
+
             newPiece()
         end
     end
