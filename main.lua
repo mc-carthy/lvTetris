@@ -203,6 +203,11 @@ function love.update(dt)
             end
 
             newPiece()
+
+            if not canPieceMove(pieceX, pieceY, pieceRotation) then
+                -- Game over
+                love.load()
+            end
         end
     end
 end
