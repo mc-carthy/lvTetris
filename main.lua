@@ -157,10 +157,8 @@ function love.load()
         end
     end
 
-    pieceType = 1
-    pieceRotation = 1
-    pieceX = 3
-    pieceY = 0
+    newSequence()
+    newPiece()
 end
 
 function love.update(dt)
@@ -171,6 +169,8 @@ function love.update(dt)
         local nextY = pieceY + 1
         if canPieceMove(pieceX, nextY, pieceRotation) then
             pieceY = nextY
+        else
+            newPiece()
         end
     end
 end
@@ -260,4 +260,23 @@ function canPieceMove(testX, testY, testRotation)
         end
     end
     return true
+end
+
+function newPiece()
+    pieceX = 3
+    pieceY = 0
+    pieceRotation = 1
+    pieceType = table.remove(sequence)
+
+    if #sequence == 0 then
+        newSequence()
+    end
+end
+
+function newSequence()
+    sequence = {}
+    for pieceIndex = 1, #pieceStructures do
+        local position = love.math.random(#sequence + 1)
+        table.insert(sequence, position, pieceIndex)
+    end
 end
