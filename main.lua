@@ -9,7 +9,8 @@ local colours = {
     o = { 0.92, 0.69, 0.47, 1 },
     s = { 0.83, 0.54, 0.93, 1 },
     t = { 0.97, 0.58, 0.77, 1 },
-    z = { 0.66, 0.83, 0.46, 1 }
+    z = { 0.66, 0.83, 0.46, 1 },
+    next = { 0.75, 0.75, 0.75, 1 }
 }
 
 local pieceStructures = {
@@ -213,18 +214,34 @@ function love.update(dt)
 end
 
 function love.draw()
+    local xOffset = 2
+    local yOffset = 5
+
     love.graphics.setBackgroundColor(1, 1, 1, 1)
+
+    -- Draw grid
     for x = 1, gridCols do
         for y = 1, gridRows do
-            drawBlock(blocks[x][y], x, y)
+            drawBlock(blocks[x][y], x + xOffset, y + yOffset)
         end
     end
 
+    -- Draw current piece
     for x = 1, pieceXCount do
         for y = 1, pieceYCount do
             local block = pieceStructures[pieceType][pieceRotation][y][x]
             if block ~= ' ' then
-                drawBlock(block, x + pieceX, y + pieceY)
+                drawBlock(block, x + pieceX + xOffset, y + pieceY + yOffset)
+            end
+        end
+    end
+
+    -- Draw next piece
+    for y = 1, pieceYCount do
+        for x = 1, pieceXCount do
+            local block = pieceStructures[sequence[#sequence]][1][y][x]
+            if block ~= ' ' then
+                drawBlock('next', x + 5, y + 1)
             end
         end
     end
