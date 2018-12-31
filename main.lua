@@ -170,6 +170,14 @@ function love.update(dt)
         if canPieceMove(pieceX, nextY, pieceRotation) then
             pieceY = nextY
         else
+            for x = 1, pieceXCount do
+                for y = 1, pieceYCount do
+                    local block = pieceStructures[pieceType][pieceRotation][y][x]
+                    if block ~= ' ' then
+                        blocks[x + pieceX][y + pieceY] = block
+                    end
+                end
+            end
             newPiece()
         end
     end
