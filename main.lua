@@ -148,18 +148,7 @@ local pieceXCount = 4
 local pieceYCount = 4
 
 function love.load()
-    timer = 0
-
-    blocks = {}
-    for x = 1, gridCols do
-        blocks[x] = {}
-        for y = 1, gridRows do
-            blocks[x][y] = ' '
-        end
-    end
-
-    newSequence()
-    newPiece()
+    reset()
 end
 
 function love.update(dt)
@@ -207,7 +196,7 @@ function love.update(dt)
 
             if not canPieceMove(pieceX, pieceY, pieceRotation) then
                 -- Game over
-                love.load()
+                reset()
             end
         end
     end
@@ -333,4 +322,19 @@ function newSequence()
         local position = love.math.random(#sequence + 1)
         table.insert(sequence, position, pieceIndex)
     end
+end
+
+function reset()
+    timer = 0
+
+    blocks = {}
+    for x = 1, gridCols do
+        blocks[x] = {}
+        for y = 1, gridRows do
+            blocks[x][y] = ' '
+        end
+    end
+
+    newSequence()
+    newPiece()
 end
